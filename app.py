@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 import random, math, os, cStringIO
 
 class MapGenerator:
-	def __init__(self, x, y):
+	def __init__(self, x, y, seed):
 		self.x = x
 		self.y = y
+		self.rand = random.Random(seed)
 		
 		self.mapMatrix = self.emptyMap(x, y)
 	
@@ -13,8 +14,8 @@ class MapGenerator:
 		return [[0]*x for i in range(y)]
 	
 	def randomCord(self):
-		x = int(random.gauss(self.x/2, self.x) % self.x)
-		y = int(random.gauss(self.y/2, self.y) % self.y)
+		x = int(self.rand.gauss(self.x/2, self.x) % self.x)
+		y = int(self.rand.gauss(self.y/2, self.y) % self.y)
 		return (x, y)
 	
 	def neighborCord(self, point):
@@ -106,8 +107,7 @@ def images(filename):
 @route('/<seed>.png')
 def index(seed=300):
 	response.content_type = "image/png"
-	random.seed(seed)
-	m = MapGenerator(100, 100)
+	m = MapGenerator(100, 100, seed)
 	m.makeRandom().smooth().smooth().smooth()
 	
 	fig = plt.imshow(m.colorize(), interpolation='nearest')
@@ -121,8 +121,7 @@ def index(seed=300):
 
 @route('/<seed>')
 def index(seed=300):
-	random.seed(seed)
-	m = MapGenerator(50, 50)
+	m = MapGenerator(50, 50, seed)
 	m.makeRandom().smooth().smooth().smooth()
 	
 	html = """
