@@ -101,4 +101,4 @@ def index(seed=300):
 	plt.savefig(output, format="png")
 	return output.getvalue()
 
-run(server='gevent', port=os.environ.get('PORT', 5000))
+run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
