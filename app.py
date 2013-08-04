@@ -14,8 +14,8 @@ class MapGenerator:
 		return [[0]*x for i in range(y)]
 	
 	def randomCord(self):
-		x = int(self.rand.gauss(self.x/2, self.x) % self.x)
-		y = int(self.rand.gauss(self.y/2, self.y) % self.y)
+		x = int(self.rand.normalvariate(self.x/2, self.x) % self.x)
+		y = int(self.rand.normalvariate(self.y/2, self.y) % self.y)
 		return (x, y)
 	
 	def neighborCord(self, point):
