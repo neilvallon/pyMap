@@ -1,6 +1,6 @@
 from bottle import *
 import matplotlib.pyplot as plt
-import random, math, cStringIO
+import random, math, os, cStringIO
 
 class MapGenerator:
 	def __init__(self, x, y):
@@ -101,4 +101,4 @@ def index(seed=300):
 	plt.savefig(output, format="png")
 	return output.getvalue()
 
-run(host='localhost', port=8081)
+run(server='gevent', port=os.environ.get('PORT', 5000))
