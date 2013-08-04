@@ -93,12 +93,13 @@ def index(seed=300):
 	m = MapGenerator(100, 100)
 	m.makeRandom().smooth().smooth().smooth()
 	
-	plt.imshow(m.colorize(), interpolation='nearest')
-	plt.ylim([0, m.y])
-	plt.xlim([0, m.x])
+	fig = plt.imshow(m.colorize(), interpolation='nearest')
+	
+	#plt.set_axis_off()
+	plt.axis('off')
 	
 	output = cStringIO.StringIO()
-	plt.savefig(output, format="png")
+	plt.savefig(output, format="png", facecolor='black', dpi=300)
 	return output.getvalue()
 
 run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
