@@ -1,6 +1,7 @@
 from bottle import *
 import matplotlib.pyplot as plt
 import random, math, os, cStringIO
+from datetime import datetime
 
 class MapGenerator:
 	def __init__(self, x, y, seed):
@@ -119,10 +120,13 @@ def index(seed=300):
 	plt.savefig(output, format="png", facecolor='black', dpi=300)
 	return output.getvalue()
 
-@route('/<seed>')
-def index(seed=300):
-	m = MapGenerator(50, 50, seed)
+@route('/<width>x<height>/<seed>')
+def index(width=50, height=50, seed=300):
+	tstart = datetime.now()
+	m = MapGenerator(int(width), int(height), seed)
 	m.makeRandom().smooth().smooth().smooth()
+	
+	tdelta = datetime.now()-tstart
 	
 	html = """
 		<html>
@@ -137,12 +141,18 @@ def index(seed=300):
 		body{
 			background-image:URL("/img/wool_colored_black.png");
 		}
+		h2{
+		color:white;
+		}
 		</style>
 		</head>
-		<body>
+		<body>"""
+	
+	html += "<h2>Generated in: "+str(tdelta)+"</h2>"
+	
+	html += """
 		<center>
-		<table>
-	"""
+		<table>"""
 	
 	for y in m.imageform():
 		html += "<tr>"
