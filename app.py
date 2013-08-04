@@ -87,9 +87,9 @@ class MapGenerator:
 				if self.isWall((x, y)):
 					colorMap[y][x] = 'stonebrick_mossy.png'
 				elif self.isPlayArea((x, y)):
-					colorMap[y][x] = 'daylight_detector_side.png'
+					colorMap[y][x] = 'planks_jungle.png'
 				else:
-					colorMap[y][x] = 'bedrock.png'
+					colorMap[y][x] = 'obsidian.png'
 		return colorMap
 	
 	def show(self):
@@ -136,7 +136,7 @@ def index(seed=300):
 		margin:-1px;
 		}
 		body{
-			background-image:URL("/img/bedrock.png");
+			background-image:URL("/img/obsidian.png");
 		}
 		</style>
 		</head>
