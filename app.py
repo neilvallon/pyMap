@@ -80,11 +80,28 @@ class MapGenerator:
 					colorMap[y][x] = [0, 0, 0]
 		return colorMap
 	
+	def imageform(self):
+		colorMap = self.emptyMap(self.x, self.y)
+		for x in range(self.x):
+			for y in range(self.y):
+				if self.isWall((x, y)):
+					colorMap[y][x] = 'stonebrick_mossy.png'
+				elif self.isPlayArea((x, y)):
+					colorMap[y][x] = 'daylight_detector_side.png'
+				else:
+					colorMap[y][x] = 'bedrock.png'
+		return colorMap
+	
 	def show(self):
 		plt.imshow(self.colorize(), interpolation='nearest')
 		plt.ylim([0, self.y])
 		plt.xlim([0, self.x])
 		plt.show()
+
+
+@get('/img/<filename:re:.*\.(jpg|png|gif|ico)>')
+def images(filename):
+    return static_file(filename, root='static/img')
 
 @route('/<seed>.png')
 def index(seed=300):
@@ -101,5 +118,47 @@ def index(seed=300):
 	output = cStringIO.StringIO()
 	plt.savefig(output, format="png", facecolor='black', dpi=300)
 	return output.getvalue()
+
+@route('/<seed>')
+def index(seed=300):
+	random.seed(seed)
+	m = MapGenerator(50, 50)
+	m.makeRandom().smooth().smooth().smooth()
+	
+	html = """
+		<html>
+		<head>
+		<title>pymap</title>
+		<style>
+		table, tr, td, img{
+		border:none;
+		padding:0px;
+		margin:-1px;
+		}
+		body{
+			background-image:URL("/img/bedrock.png");
+		}
+		</style>
+		</head>
+		<body>
+		<center>
+		<table>
+	"""
+	
+	for y in m.imageform():
+		html += "<tr>"
+		for x in y:
+			html += "<td><img src='/img/"+x+"' /></td>"
+		html += "</tr>"
+	
+	
+	html += """
+	</table>
+	</center>
+	</body>
+	</html>
+	"""
+	
+	return html
 
 run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
