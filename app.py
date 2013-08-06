@@ -63,6 +63,20 @@ class MapGenerator:
 		self.mapMatrix = newMap
 		return self
 	
+	def nearestPlayable(self, point):
+		frontier = [point]
+		explored = []
+		while frontier:
+			node = frontier.pop(0)
+			if self.isPlayArea(node):
+				return node
+				
+			neighbors = self.neighborCord(node)
+			toAdd = filter(lambda x: not (x in frontier or x in explored), neighbors)
+			
+			frontier.extend(toAdd)
+			explored.append(node)
+	
 	def removeIslands(self):
 		newMap = self.emptyMap(self.x, self.y)
 		
@@ -84,8 +98,8 @@ class MapGenerator:
 	
 	def findSpawns(self):
 		posibleSpawns = self.playableCords()
-		s1 = self.randomCord()
-		s2 = self.randomCord()
+		s1 = self.randomPlayable()
+		s2 = self.randomPlayable()
 		
 		for i in range(3): ## Do 3 iterations
 			s1acum = (0, 0)
@@ -106,7 +120,9 @@ class MapGenerator:
 			s1 =  (s1acum[0] / s1c, s1acum[1] / s1c)
 			s2 =  (s2acum[0] / s2c, s2acum[1] / s2c)
 		
-		self.spawns = ((int(s1[0]), int(s1[1])), (int(s2[0]), int(s2[1])))
+		s1 = self.nearestPlayable( (int(s1[0]), int(s1[1])) )
+		s2 = self.nearestPlayable( (int(s2[0]), int(s2[1])) )
+		self.spawns = (s1, s2)
 		return self
 	
 	def isPlayArea(self, point):
