@@ -292,7 +292,7 @@ def index(width=50, height=50):
 		</head>
 		<body>"""
 	
-	html += "<h3>Seed: "+str(seed)+"</h3>"
+	html += "<h3>Seed: <a href='/50x50/"+str(seed)+"'>"+str(seed)+"</a></h3>"
 	html += "<h4>Generated in: "+str(tdelta)+"</h4>"
 	
 	html += """
