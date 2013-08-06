@@ -228,7 +228,7 @@ def index(width=50, height=50, seed=300):
 		body{
 			background-image:URL("/img/wool_colored_black.png");
 		}
-		h2{
+		h3,h4{
 		color:white;
 		}
 		</style>
@@ -261,7 +261,8 @@ def index(width=50, height=50, seed=300):
 @route('/')
 def index(width=50, height=50):
 	tstart = datetime.now()
-	m = MapGenerator(int(width), int(height), random.random())
+	seed = random.random()
+	m = MapGenerator(int(width), int(height), str(seed))
 	m.makeRandom().smooth().smooth().smooth().removeIslands().findSpawns()
 	
 	tdelta = datetime.now()-tstart
@@ -279,14 +280,15 @@ def index(width=50, height=50):
 		body{
 			background-image:URL("/img/wool_colored_black.png");
 		}
-		h2{
+		h3,h4{
 		color:white;
 		}
 		</style>
 		</head>
 		<body>"""
 	
-	html += "<h2>Generated in: "+str(tdelta)+"</h2>"
+	html += "<h3>Seed: "+str(seed)+"</h3>"
+	html += "<h4>Generated in: "+str(tdelta)+"</h4>"
 	
 	html += """
 		<center>
