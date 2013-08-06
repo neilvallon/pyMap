@@ -101,7 +101,7 @@ class MapGenerator:
 		s1 = self.randomPlayable()
 		s2 = self.randomPlayable()
 		
-		for i in range(10): ## Do 10 iterations
+		for i in range(20):
 			s1acum = (0, 0)
 			s2acum = (0, 0)
 			s1c = 0
