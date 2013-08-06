@@ -107,13 +107,18 @@ class MapGenerator:
 			s1c = 0
 			s2c = 0
 			
+			deadCord = ( (int( (s1[0]+s2[0]) / 2) ), (int( (s1[1]+s2[1]) / 2 )) )
+			
 			for s in posibleSpawns:
 				s1Dis = self.manhatanDist(s, s1)
 				s2Dis = self.manhatanDist(s, s2)
+				deadDis = self.manhatanDist(s, deadCord)/2
 				if s1Dis < s2Dis:
+					if deadDis < s1Dis: continue
 					s1c += 1
 					s1acum = (s1acum[0] + s[0], s1acum[1] + s[1])
 				else:
+					if deadDis < s2Dis: continue
 					s2c += 1
 					s2acum = (s2acum[0] + s[0], s2acum[1] + s[1])
 			
