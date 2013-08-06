@@ -235,7 +235,7 @@ def index(width=50, height=50, seed=300):
 		</head>
 		<body>"""
 	
-	html += "<h2>Generated in: "+str(tdelta)+"</h2>"
+	html += "<h4>Generated in: "+str(tdelta)+"</h4>"
 	
 	html += """
 		<center>
