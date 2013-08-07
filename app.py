@@ -96,6 +96,34 @@ class MapGenerator:
 		self.mapMatrix = newMap
 		return self
 	
+	def removeIslands_n(self):
+		newMap = self.emptyMap(self.x, self.y)
+		(start, goal) = self.spawns
+		
+		frontier = [(start, self.manhatanDist(start, goal))]
+		explored = []
+		while frontier:
+			frontier.sort(key=lambda tup: tup[1], reverse=True)
+			(node, weight) = frontier.pop()
+			
+			if node == goal:
+				self.searched = explored
+				return self
+			
+			neighbors = self.moveableNeighbors(node)
+			toAdd = filter(lambda x: not (x in explored), neighbors)
+			
+			toAddW = map(lambda x: (x, self.manhatanDist(x, goal)), toAdd)
+			
+			frontier.extend(toAddW)
+			explored.extend(toAdd)
+			newMap[node[1]][node[0]] = 1
+		
+		self.searched = explored
+		self.mapMatrix = newMap
+		self.findSpawns()
+		return self
+	
 	def findSpawns(self):
 		posibleSpawns = self.playableCords()
 		s1 = self.randomPlayable()
@@ -178,6 +206,8 @@ class MapGenerator:
 			for y in range(self.y):
 				if (x, y) in self.spawns:
 					colorMap[y][x] = 'dropper_front_horizontal.png'
+				elif (x, y) in self.searched:
+					colorMap[y][x] = 'planks_birch.png'
 				elif self.isWall((x, y)):
 					colorMap[y][x] = 'stonebrick_mossy.png'
 				elif self.isPlayArea((x, y)):
@@ -216,7 +246,8 @@ def index(seed=300):
 def index(width=50, height=50, seed=300):
 	tstart = datetime.now()
 	m = MapGenerator(int(width), int(height), seed)
-	m.makeRandom().smooth().smooth().smooth().removeIslands().findSpawns()
+	#m.makeRandom().smooth().smooth().smooth().removeIslands().findSpawns()
+	m.makeRandom().smooth().smooth().smooth().findSpawns().removeIslands_n()
 	
 	tdelta = datetime.now()-tstart
 	
@@ -268,7 +299,8 @@ def index(width=50, height=50):
 	tstart = datetime.now()
 	seed = random.random()
 	m = MapGenerator(int(width), int(height), str(seed))
-	m.makeRandom().smooth().smooth().smooth().removeIslands().findSpawns()
+	#m.makeRandom().smooth().smooth().smooth().removeIslands().findSpawns()
+	m.makeRandom().smooth().smooth().smooth().findSpawns().removeIslands_n()
 	
 	tdelta = datetime.now()-tstart
 	
