@@ -1,9 +1,9 @@
 from bottle import *
-import matplotlib.pyplot as plt
-import random, math, os, cStringIO
+import random, math
 from datetime import datetime
 
 from MapGenerator import *
+from Tessellation import *
 
 
 def buildHTMLMap(seed, width, height):
@@ -41,7 +41,14 @@ def buildHTMLMap(seed, width, height):
 		<center>
 		<table>"""
 	
-	for y in m.imageform():
+	table = {
+		'play': 'sand.png',
+		'spawn': 'dropper_front_horizontal.png',
+		'searched': 'planks_birch.png',
+		'wall': 'stonebrick_mossy.png',
+		'empty': 'wool_colored_black.png'}
+	
+	for y in Tessellation(m, table).mapValues():
 		html += "<tr>"
 		for x in y:
 			html += "<td><img src='/img/"+x+"' /></td>"
@@ -64,11 +71,22 @@ def images(filename):
 
 @route('/<seed>.png')
 def index(seed=300):
+	import matplotlib.pyplot as plt
+	import os, cStringIO
+	
 	response.content_type = "image/png"
 	m = MapGenerator(100, 100, seed)
-	m.makeRandom().smooth().smooth().smooth()
+	m.makeRandom().smooth().smooth().smooth().findSpawns().removeIslands_n()
 	
-	fig = plt.imshow(m.colorize(), interpolation='nearest')
+	
+	table = {
+		'play': [1, 1, 1],
+		'spawn': [0, 0, 1],
+		'searched': [0.5, 1, 0.5],
+		'wall': [1, 0, 0],
+		'empty': [0, 0, 0]}
+	
+	fig = plt.imshow(Tessellation(m, table).mapValues(), interpolation='nearest')
 	
 	#plt.set_axis_off()
 	plt.axis('off')

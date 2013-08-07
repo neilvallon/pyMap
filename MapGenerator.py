@@ -184,37 +184,3 @@ class MapGenerator:
 	
 	def size(self):
 		return (self.x, self.y)
-	
-	def colorize(self):
-		colorMap = self.emptyMap(self.x, self.y)
-		for x in range(self.x):
-			for y in range(self.y):
-				if self.isWall((x, y)):
-					colorMap[y][x] = [1, 0, 0]
-				elif self.isPlayArea((x, y)):
-					colorMap[y][x] = [1, 1, 1]
-				else:
-					colorMap[y][x] = [0, 0, 0]
-		return colorMap
-	
-	def imageform(self):
-		colorMap = self.emptyMap(self.x, self.y)
-		for x in range(self.x):
-			for y in range(self.y):
-				if (x, y) in self.spawns:
-					colorMap[y][x] = 'dropper_front_horizontal.png'
-				elif (x, y) in self.searched:
-					colorMap[y][x] = 'planks_birch.png'
-				elif self.isWall((x, y)):
-					colorMap[y][x] = 'stonebrick_mossy.png'
-				elif self.isPlayArea((x, y)):
-					colorMap[y][x] = 'sand.png'
-				else:
-					colorMap[y][x] = 'wool_colored_black.png'
-		return colorMap
-	
-	def show(self):
-		plt.imshow(self.colorize(), interpolation='nearest')
-		plt.ylim([0, self.y])
-		plt.xlim([0, self.x])
-		plt.show()
