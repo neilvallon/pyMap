@@ -1,15 +1,23 @@
 from MapGenerator import *
+from Tessellation import *
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+colors = {
+	'play':     [1, 1, 1],
+	'spawn':    [1, 0, 0],
+	'searched': [0.5, 1, 0.5],
+	'wall':     [0, 0, 0],
+	'empty':    [0, 0, 0]
+	}
 
 def smoothPlot(m):
 	fig = plt.figure()
 	fig.suptitle('No smoothing', fontsize=20, fontweight='bold')
 
-	## Flip matrix values
-	out = np.logical_xor(m.mapMatrix, True)
-	plt.imshow(out, cmap='binary', interpolation='nearest')
+	out = Tessellation(m, colors).mapValues()
+	plt.imshow(out, interpolation='nearest')
 
 	plt.savefig('img/initial.png')
 
@@ -19,8 +27,8 @@ def smoothPlot(m):
 		fig = plt.figure()
 		fig.suptitle('Smooth Factor - %s' % n, fontsize=20, fontweight='bold')
 
-		out = np.logical_xor(m.mapMatrix, True)
-		plt.imshow(out, cmap='binary', interpolation='nearest')
+		out = Tessellation(m, colors).mapValues()
+		plt.imshow(out, interpolation='nearest')
 
 		plt.savefig('img/smothed_%s.png' % n)
 
