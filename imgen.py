@@ -1,13 +1,10 @@
-import random, math
-from datetime import datetime
-
 from MapGenerator import *
-from Tessellation import *
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 def index(seed=300):
-	import matplotlib.pyplot as plt
-	import numpy as np
-
 	m = MapGenerator(100, 100, seed)
 	m.makeRandom()
 	
