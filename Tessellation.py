@@ -6,10 +6,10 @@ class Tessellation:
 		self.lookup = lookup
 		
 	def parsePoint(self, point):
-		if point in self.mapGen.spawns:
+		if hasattr(self.mapGen, 'spawns') and point in self.mapGen.spawns:
 			return self.lookup['spawn']
 			
-		elif point in self.mapGen.searched:
+		elif hasattr(self.mapGen, 'searched') and point in self.mapGen.searched:
 			return self.lookup['searched']
 			
 		elif self.mapGen.isWall(point):

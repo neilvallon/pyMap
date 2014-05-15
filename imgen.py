@@ -13,16 +13,9 @@ colors = {
 	}
 
 def smoothPlot(m):
-	fig = plt.figure()
-	fig.suptitle('No smoothing', fontsize=20, fontweight='bold')
-
-	out = Tessellation(m, colors).mapValues()
-	plt.imshow(out, interpolation='nearest')
-
-	plt.savefig('img/initial.png')
-
-	for n in xrange(3):
-		m.smooth()
+	for n in xrange(4):
+		if n > 0:
+			m.smooth()
 
 		fig = plt.figure()
 		fig.suptitle('Smooth Factor - %s' % n, fontsize=20, fontweight='bold')
